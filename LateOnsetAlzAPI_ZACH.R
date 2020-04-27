@@ -1,5 +1,6 @@
 ### API GENE DATA PULL | Late-Onset Alzheimer's Disease | Zachary Sykes
 
+
 # Library load
 library(httr)
 library(jsonlite)
@@ -7,7 +8,7 @@ library(xml2)
 library(fs)
 
 lo_alz_geneids_1 <- c('SCAPER', 'INPPD5', 'EPHA1', 'AK128216', 'STAU2',
-                      'ZCWPW1', 'SORL1', 'ATM', 'HLA-DRB5', 'HLA-DRB1',
+                      'ZCWPW1', 'SORL1', 'HLA-DRB5', 'HLA-DRB1',
                       'HDAC9', 'MS4A4A', 'CR1', 'FST', 'MPZL1', 'COL25A1',
                       'UGT1A8', 'UGT1A10', 'AP2A2', 'TMCO4', 'NDUFAF6',
                       'FBXL7', 'COBL', 'HS3ST1', 'PICALM', 'NEGR1', 'NEGR1-IT1',
@@ -17,6 +18,7 @@ lo_alz_geneids_1 <- c('SCAPER', 'INPPD5', 'EPHA1', 'AK128216', 'STAU2',
                       'TAS2R5', 'CEACAM16', 'BCL3', 'PVRL2', 'TOMM40',
                       'PPP1R37', 'AOX1', 'ADAMTS20', 'HMCN1', 'MTHFD1L',
                       'FERMT2', 'CLU', 'PTK2B', 'OZD4', 'HS3ST1', 'CD33')
+
 lo_alz_geneids_2 <- c('BSG', 'ACE', 'SPPL2A', 'TECTA', 'FAM19A5', 'ECHDC3',
                       'TRPM1', 'MEF2C', 'SELO', 'NME8', 'SQSTM1', 'JPH3', 
                       'SESTD1', 'SEC24B', 'PLCG2', 'SLC24A4', 'RIN3',
@@ -32,6 +34,7 @@ lo_alz_geneids_2 <- c('BSG', 'ACE', 'SPPL2A', 'TECTA', 'FAM19A5', 'ECHDC3',
                       'ISYNA1', 'ELL', 'SSBP4', 'MIR142', 'TSPOAP1-AS1', 'SLC10A2',
                       'CDON')
 
+
 target_pheno_list <- list(
   lateonset_alzheimers_disease_1 = lo_alz_geneids_1,
   lateonset_alzheimers_disease_2 = lo_alz_geneids_2
@@ -45,8 +48,8 @@ target_pheno_list <- list(
 # If you upload the .rds files saved below to the repository I will kill you
 start_dir <- getwd()
 # CHANGE THIS PATH TO SOMETHING OTHER THAN YOUR GIT FOLDER
-# rds_save_dir <- setwd('H:/R_Scripts/ProjectAPISaves/') # Zach's Windows PATH
-rds_save_dir <- setwd('/media/sykes/BLUE/R_Scripts/ProjectAPISaves/') # Zach's Linux PATH
+rds_save_dir <- setwd('C:/Users/zacha/Documents/BigData/ProjectAPISaves/') # Zach's Windows PATH
+# rds_save_dir <- setwd('/media/sykes/BLUE/R_Scripts/ProjectAPISaves/') # Zach's Linux PATH
 
 ######################
 ### VERY IMPORTANT ###
@@ -105,7 +108,7 @@ for (gene in target_pheno_list[[1]]) {
     filename = paste0(tolower(gene), '_data_loalz1_json.rds')
   )
   lo_alz_geneids_1_resp[[gene]] <- list(
-    content(readRDS(paste0(tolower(gene), '_data_loalz1_json.rds')))
+    jsonlite::fromJSON(content(readRDS(paste0(tolower(gene), '_data_loalz1_json.rds')), as = 'text'))
   )
   Sys.sleep(15)
 }
@@ -128,7 +131,7 @@ for (gene in target_pheno_list[[2]]) {
     filename = paste0(tolower(gene), '_data_loalz2_json.rds')
   )
   lo_alz_geneids_2_resp[[gene]] <- list(
-    content(readRDS(paste0(tolower(gene), '_data_loalz2_json.rds')))
+    jsonlite::fromJSON(content(readRDS(paste0(tolower(gene), '_data_loalz2_json.rds')), as = 'text'))
   )
   Sys.sleep(15)
 }

@@ -1,5 +1,8 @@
 ### API GENE DATA PULL | Celiac Disease | Zachary Sykes
 
+# Clear environment prior to work
+rm(list = ls())
+
 # Library load
 library(httr)
 library(jsonlite)
@@ -17,8 +20,8 @@ celiac_geneids <- c('HLA-DQA1', 'HLA-DQA2', 'HLA-DQB1', 'MYO9B', 'CTLA4')
 # If you upload the .rds files saved below to the repository I will kill you
 start_dir <- getwd()
 # CHANGE THIS PATH TO SOMETHING OTHER THAN YOUR GIT FOLDER
-# rds_save_dir <- setwd('H:/R_Scripts/ProjectAPISaves/') # Zach's Windows PATH
-rds_save_dir <- setwd('/media/sykes/BLUE/R_Scripts/ProjectAPISaves/') # Zach's Linux PATH
+rds_save_dir <- setwd('C:/Users/zacha/Documents/BigData/ProjectAPISaves/') # Zach's Windows PATH
+# rds_save_dir <- setwd('/media/sykes/BLUE/R_Scripts/ProjectAPISaves/') # Zach's Linux PATH
 
 ######################
 ### VERY IMPORTANT ###
@@ -75,7 +78,7 @@ for (gene in celiac_geneids) {
     filename = paste0(tolower(gene), '_data_celiac_json.rds')
   )
   celiac_geneids_resp[[gene]] <- list(
-    content(readRDS(paste0(tolower(gene), '_data_celiac_json.rds')))
+    jsonlite::fromJSON(content(readRDS(paste0(tolower(gene), '_data_celiac_json.rds')), as = 'text'))
   )
   Sys.sleep(15)
 }
