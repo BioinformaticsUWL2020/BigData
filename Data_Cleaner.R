@@ -253,6 +253,7 @@ for (i in 1:length(lo_alz_2_gene_dfs)) {
     next
   }
 }
+<<<<<<< HEAD
 
 #################################################
 ### Cleaning and compiling the data -lo_alz 2 ###
@@ -331,3 +332,5 @@ cleaned_lo_alz_2_data <- cleaned_lo_alz_2_data[2:92,]
 combined_lo_alz_data <- rbind(cleaned_lo_alz_1_data, cleaned_lo_alz_2_data)
 setwd(XCEL_dir)
 write.csv(combined_lo_alz_data, 'late-onset_alzheimers_data') # Data saved to local
+=======
+>>>>>>> ac630ab80d9b1dc3f689938bf5dc367f9a53c5b8
