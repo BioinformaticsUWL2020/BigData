@@ -1,5 +1,8 @@
 ### API GENE DATA PULL | Hereditary Hemochromatosis | Andrew Gyesi
 
+# Clear Working Environment
+rm(list = ls())
+
 # Library load
 library(httr)
 library(jsonlite)
@@ -17,8 +20,8 @@ h_hem_geneids <- c('HFE', 'SLC40A1', 'TFR2', 'HAMP')
 # If you upload the .rds files saved below to the repository I will kill you
 start_dir <- getwd()
 # CHANGE THIS PATH TO SOMETHING OTHER THAN YOUR GIT FOLDER
-# rds_save_dir <- setwd('H:/R_Scripts/ProjectAPISaves/') # Zach's Windows PATH
-rds_save_dir <- setwd('/media/sykes/BLUE/R_Scripts/ProjectAPISaves/') # Zach's Linux PATH
+rds_save_dir <- setwd('C:/Users/zacha/Documents/BigData/ProjectAPISaves/') # Zach's Windows PATH
+# rds_save_dir <- setwd('/media/sykes/BLUE/R_Scripts/ProjectAPISaves/') # Zach's Linux PATH
 
 ######################
 ### VERY IMPORTANT ###
@@ -75,7 +78,7 @@ for (gene in h_hem_geneids) {
     filename = paste0(tolower(gene), '_data_hered_hem_json.rds')
   )
   h_hem_geneids_resp[[gene]] <- list(
-    content(readRDS(paste0(tolower(gene), '_data_hered_hem_json.rds')))
+    jsonlite::fromJSON(content(readRDS(paste0(tolower(gene), '_data_hered_hem_json.rds')), as = 'text'))
   )
   Sys.sleep(15)
 }
