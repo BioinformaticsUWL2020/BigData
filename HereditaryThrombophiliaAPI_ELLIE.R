@@ -1,5 +1,8 @@
 ### API GENE DATA PULL | Hereditary Thrombophilia | Ellie Sparling
 
+# Clearing Working Environment
+rm(list = ls())
+
 # Library load
 library(httr)
 library(jsonlite)
@@ -17,8 +20,8 @@ h_thromb_geneids <- c('F9', 'HRG', 'PROC', 'PROS1', 'SERPINC1')
 # If you upload the .rds files saved below to the repository I will kill you
 start_dir <- getwd()
 # CHANGE THIS PATH TO SOMETHING OTHER THAN YOUR GIT FOLDER
-# rds_save_dir <- setwd('H:/R_Scripts/ProjectAPISaves/') # Zach's Windows PATH
-rds_save_dir <- setwd('/media/sykes/BLUE/R_Scripts/ProjectAPISaves/') # Zach's Linux PATH
+rds_save_dir <- setwd('C:/Users/zacha/Documents/BigData/ProjectAPISaves/') # Zach's Windows PATH
+# rds_save_dir <- setwd('/media/sykes/BLUE/R_Scripts/ProjectAPISaves/') # Zach's Linux PATH
 
 ######################
 ### VERY IMPORTANT ###
@@ -69,13 +72,13 @@ disease_pheno_json_pull <- function(geneid, filename) {
 ###################################################
 
 h_thromb_geneids_resp <- list()
-for (gene in target_pheno_list[[10]]) {
+for (gene in h_thromb_geneids) {
   disease_pheno_json_pull(
     geneid = gene,
     filename = paste0(tolower(gene), '_data_hered_thromb_json.rds')
   )
   h_thromb_geneids_resp[[gene]] <- list(
-    content(readRDS(paste0(tolower(gene), '_data_hered_thromb_json.rds')))
+    jsonlite::fromJSON(content(readRDS(paste0(tolower(gene), '_data_hered_thromb_json.rds')), as = 'text'))
   )
   Sys.sleep(15)
 }
@@ -83,5 +86,5 @@ for (gene in target_pheno_list[[10]]) {
 # Run this after the GET request above to clear the working directory
 file_shift(
   namedir = '/h_thromb_pheno_data/',
-  filename = paste0(tolower(target_pheno_list[[10]]), '_data_hered_thromb_json.rds')
+  filename = paste0(tolower(h_thromb_geneids), '_data_hered_thromb_json.rds')
 )

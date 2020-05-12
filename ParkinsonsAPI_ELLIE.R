@@ -1,5 +1,8 @@
 ### API GENE DATA PULL | Parkinson's Disease | Ellie Sparling
 
+# Clearing the Working Environment
+rm(list = ls())
+
 # Library load
 library(httr)
 library(jsonlite)
@@ -19,8 +22,8 @@ pd_geneids <- c('GLUD2', 'TBP', 'LRRK2', 'MAPT', 'SNCA', 'ATP13A2',
 # If you upload the .rds files saved below to the repository we won't be having a good time
 start_dir <- getwd()
 # CHANGE THIS PATH TO SOMETHING OTHER THAN YOUR GIT FOLDER
-# rds_save_dir <- setwd('H:/R_Scripts/ProjectAPISaves/') # Zach's Windows PATH
-rds_save_dir <- setwd('/media/sykes/BLUE/R_Scripts/ProjectAPISaves/') # Zach's Linux PATH
+rds_save_dir <- setwd('C:/Users/zacha/Documents/BigData/ProjectAPISaves/') # Zach's Windows PATH
+# rds_save_dir <- setwd('/media/sykes/BLUE/R_Scripts/ProjectAPISaves/') # Zach's Linux PATH
 
 ######################
 ### VERY IMPORTANT ###
@@ -87,9 +90,7 @@ for (gene in pd_geneids) {
                      sep = '')
   )
   pd_geneids_resp_list[[gene]] <- list(
-    content(readRDS(paste(tolower(gene),
-                          '_data_pd_json.rds',
-                          sep = '')))
+    jsonlite::fromJSON(content(readRDS(paste0(tolower(gene), '_data_pd_json.rds')), as = 'text'))
   ) 
   Sys.sleep(15)
 }
