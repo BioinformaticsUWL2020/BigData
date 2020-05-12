@@ -1,4 +1,4 @@
-### Script to trim and chart relevant gene data from the AI returns
+### Script to trim and chart relevant gene data from the API returns
 ### 12.05.2020
 
 # Clearing Working Environment
