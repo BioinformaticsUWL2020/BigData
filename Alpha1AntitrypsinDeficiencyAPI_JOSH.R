@@ -1,5 +1,8 @@
 ### API GENE DATA PULL | Alpha-1 Antitrypsin Deficiency | Joshua Russell
 
+# Clearing Working Enviroment
+rm(list = ls())
+
 # Library load
 library(httr)
 library(jsonlite)
@@ -17,8 +20,8 @@ alpha1_antitryp_geneids <- c('SERPINA1')
 # If you upload the .rds files saved below to the repository I will kill you
 start_dir <- getwd()
 # CHANGE THIS PATH TO SOMETHING OTHER THAN YOUR GIT FOLDER
-# rds_save_dir <- setwd('H:/R_Scripts/ProjectAPISaves/') # Zach's Windows PATH
-rds_save_dir <- setwd('/media/sykes/BLUE/R_Scripts/ProjectAPISaves/') # Zach's Linux PATH
+rds_save_dir <- setwd('C:/Users/zacha/Documents/BigData/ProjectAPISaves/') # Zach's Windows PATH
+# rds_save_dir <- setwd('/media/sykes/BLUE/R_Scripts/ProjectAPISaves/') # Zach's Linux PATH
 
 ######################
 ### VERY IMPORTANT ###
@@ -85,9 +88,7 @@ for (gene in alpha1_antitryp_geneids) {
                      sep = '')
   )
   alpha1_antitryp_geneids_resp[[gene]] <- list(
-    content(readRDS(paste(tolower(gene),
-                          '_data_alpha1_antitryp_json.rds',
-                          sep = '')))
+    jsonlite::fromJSON(content(readRDS(paste0(tolower(gene),'_data_alpha1_antitryp_json.rds')), as = 'text'))
   )
   Sys.sleep(15)
 }
