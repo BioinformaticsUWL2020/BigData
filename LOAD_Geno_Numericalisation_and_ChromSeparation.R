@@ -29,6 +29,7 @@ setwd(paste0(top_level_path, ext2_path))
 myY  <- read.table('load_pheno.txt', head = TRUE)
 myG  <- read.table('load_hapmap.txt', head = FALSE)
 
+setwd(top_level_path)
 
 x <- GAPIT.HapMap(myG)
 
@@ -163,7 +164,7 @@ if(!(dir.exists('LOAD_Geno_by_Chrom'))) {
 }
 
 # Where the .txt files will be written
-setwd(paste0(top_level_path, ext_path))
+setwd(paste0(top_level_path, ext1_path))
 
 for(i in 1:length(chrom_sep_genotypes)) {
   write.table(
