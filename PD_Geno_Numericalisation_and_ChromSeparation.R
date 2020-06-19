@@ -22,7 +22,10 @@ library(rrBLUP)
 library(NAM)
 
 top_level_path <- 'C:/Users/zacha/Documents/BigData/' # Change to match your file structure
-ext_path       <- 'PD_Geno_by_Chrom/'
+ext1_path      <- 'PD_Geno_by_Chrom/'
+ext2_path      <- 'HapMap_and_Pheno_Files/' 
+
+setwd(paste0(top_level_path, ext2_path))
 
 # Genotype Numericalisation
 myY  <- read.table('pd_pheno.txt', head = TRUE)
@@ -139,9 +142,6 @@ numeric_pd_genotype_chromY <- numeric_pd_genotype %>%
   filter(grepl('^24$', Chromosome))
 numeric_pd_genotype_chromMT <- numeric_pd_genotype %>%
   filter(grepl('^25$', Chromosome))
-
-# Where the .txt files will be written
-setwd(paste0(top_level_path, ext_path))
 
 chrom_sep_genotypes <- list(numeric_pd_genotype_chrom1, numeric_pd_genotype_chrom2, 
                             numeric_pd_genotype_chrom3, numeric_pd_genotype_chrom4,

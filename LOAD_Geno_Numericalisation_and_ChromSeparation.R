@@ -22,9 +22,10 @@ library(rrBLUP)
 library(NAM)
 
 top_level_path <- 'C:/Users/zacha/Documents/BigData/' # Change to match your file structure
-ext_path       <- 'LOAD_Geno_by_Chrom/'
+ext1_path      <- 'LOAD_Geno_by_Chrom/'
+ext2_path      <- 'HapMap_and_Pheno_Files/' 
 
-setwd(top_level_path)
+setwd(paste0(top_level_path, ext2_path))
 
 # Genotype Numericalisation
 myY  <- read.table('load_pheno.txt', head = TRUE)
