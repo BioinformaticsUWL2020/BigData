@@ -16,10 +16,8 @@ source("http://www.zzlab.net/GAPIT/emma.txt")
 source("http://www.zzlab.net/GAPIT/gapit_functions.txt")
 ## GAPIT REQUIREMENTS
 
-
 library(plyr)
-library(rrBLUP)
-library(NAM)
+library(hablar)
 
 top_level_path <- 'C:/Users/zacha/Documents/BigData/' # Change to match your file structure
 ext1_path      <- 'LOAD_Geno_by_Chrom/'
