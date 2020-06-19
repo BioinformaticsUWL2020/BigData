@@ -12,11 +12,12 @@ library(plyr)
 
 # PATHs 
 top_level_path <- 'C:/Users/zacha/Documents/BigData/' # Change to match your file structure
-ext_path <- 'ID_samples_TextFiles/'
-XCEL_dump_top <- 'L:/UWL/BigDataProjectXcelFiles/'
+ext1_path      <- 'ID_samples_TextFiles/'
+ext2_path      <- 'HapMap_and_Pheno_Files/' 
+XCEL_dump_top  <- 'L:/UWL/BigDataProjectXcelFiles/'
 
 # Seting ID vectors to subset openSNP_users
-setwd(paste0(top_level_path, ext_path))
+setwd(paste0(top_level_path, ext1_path))
 
 # PD
 set.seed(1000)
@@ -56,11 +57,11 @@ openSNP_users <- jsonlite::fromJSON(
 ##### PD SAMPLE GENO EXTRACTION #####
 
 # binding df to keep the genotypes in mem
-rs <- as.character(NA)
-chrom <- as.character(NA)
-pos <- as.character(NA)
+rs       <- as.character(NA)
+chrom    <- as.character(NA)
+pos      <- as.character(NA)
 Genotype <- as.character(NA)
-UserID <- as.factor(NA)
+UserID   <- as.factor(NA)
 
 binding_df <- tibble(rs, chrom, pos, Genotype, UserID)
 
@@ -95,21 +96,21 @@ for (i in 1:length(pd_sample_genotypes$id)) {
 pd_case_genotypes <- binding_df[2:length(binding_df$rs), ]
 
 # Removing '--'
-genotype_col <- pd_case_genotypes$Genotype
-index_w_blanks <- grep('--', genotype_col)
-genotype_col <- replace(genotype_col, index_w_blanks, 'NN')
-pd_case_genotypes <- case_genotypes %>%
+genotype_col      <- pd_case_genotypes$Genotype
+index_w_blanks    <- grep('--', genotype_col)
+genotype_col      <- replace(genotype_col, index_w_blanks, 'NN')
+pd_case_genotypes <- pd_case_genotypes %>%
   mutate(Genotype = genotype_col)
 
 
 ##### CONTROL SAMPLE GENO EXTRACTION #####
 
 # binding df to keep the genotypes in mem
-rs <- as.character(NA)
-chrom <- as.character(NA)
-pos <- as.character(NA)
+rs       <- as.character(NA)
+chrom    <- as.character(NA)
+pos      <- as.character(NA)
 Genotype <- as.character(NA)
-UserID <- as.factor(NA)
+UserID   <- as.factor(NA)
 
 binding_df <- tibble(rs, chrom, pos, Genotype, UserID)
 
@@ -144,66 +145,58 @@ for (i in 1:length(control_sample_genotypes$id)) {
 control_genotype <- binding_df[2:length(binding_df$rs), ]
 
 # Removing '--'
-genotype_col <- control_genotype$Genotype
-index_w_blanks <- grep('--', genotype_col)
-genotype_col <- replace(genotype_col, index_w_blanks, 'NN')
+genotype_col     <- control_genotype$Genotype
+index_w_blanks   <- grep('--', genotype_col)
+genotype_col     <- replace(genotype_col, index_w_blanks, 'NN')
 control_genotype <- control_genotype %>%
   mutate(Genotype = genotype_col)
 
 
-### HAPMAP CONSTRUCTION ###
+##### HAPMAP CONSTRUCTION #####
 setwd(top_level_path)
 
-dummy_hapmap <- rbind(case_genotypes, control_genotype)
-dummy_hapmap <- dummy_hapmap %>%
+pd_hapmap <- rbind(pd_case_genotypes, control_genotype)
+pd_hapmap <- pd_hapmap %>%
   spread(UserID, Genotype, fill = 'NN') %>%
   convert(num(pos)) %>%
   arrange(chrom, pos)
 
-dummy_hapmap$chrom <- factor(dummy_hapmap$chrom, levels = c('1', '2', '3', '4', '5', '6', '7',
-                                                            '8', '9', '10', '11', '12', '13', '14', '15', '16',
-                                                            '17', '18', '19', '20', '21', '22', 'X', 'Y', 'MT'))
-dummy_hapmap$chrom <- revalue(dummy_hapmap$chrom, c('X' = '23', 'Y' = '24', 'MT' = '25'))
-dummy_hapmap$chrom <- as.numeric(dummy_hapmap$chrom)
-dummy_hapmap$pos <- as.numeric(dummy_hapmap$pos)
-dummy_hapmap$rs <- as.factor(dummy_hapmap$rs)
+pd_hapmap$chrom <- factor(pd_hapmap$chrom, levels = c('1', '2', '3', '4', '5', '6', '7',
+                                                      '8', '9', '10', '11', '12', '13', '14', '15', '16',
+                                                      '17', '18', '19', '20', '21', '22', 'X', 'Y', 'MT'))
+pd_hapmap$chrom <- revalue(pd_hapmap$chrom, c('X' = '23', 'Y' = '24', 'MT' = '25'))
+pd_hapmap$chrom <- as.numeric(pd_hapmap$chrom)
+pd_hapmap$pos   <- as.numeric(pd_hapmap$pos)
+pd_hapmap$rs    <- as.factor(pd_hapmap$rs)
 
 
-dummy_hapmap$alleles <- as.character(rep(NA, length(dummy_hapmap$rs)))
-dummy_hapmap$strand <- as.character(rep(NA, length(dummy_hapmap$rs)))
-dummy_hapmap$assembly <- as.character(rep(NA, length(dummy_hapmap$rs)))
-dummy_hapmap$center <- as.character(rep(NA, length(dummy_hapmap$rs)))
-dummy_hapmap$protLSID <- as.character(rep(NA, length(dummy_hapmap$rs)))
-dummy_hapmap$assayLSID <- as.character(rep(NA, length(dummy_hapmap$rs)))
-dummy_hapmap$panel <- as.character(rep(NA, length(dummy_hapmap$rs)))
-dummy_hapmap$QCcode <- as.character(rep(NA, length(dummy_hapmap$rs)))
+pd_hapmap$alleles   <- as.character(rep(NA, length(pd_hapmap$rs)))
+pd_hapmap$strand    <- as.character(rep(NA, length(pd_hapmap$rs)))
+pd_hapmap$assembly  <- as.character(rep(NA, length(pd_hapmap$rs)))
+pd_hapmap$center    <- as.character(rep(NA, length(pd_hapmap$rs)))
+pd_hapmap$protLSID  <- as.character(rep(NA, length(pd_hapmap$rs)))
+pd_hapmap$assayLSID <- as.character(rep(NA, length(pd_hapmap$rs)))
+pd_hapmap$panel     <- as.character(rep(NA, length(pd_hapmap$rs)))
+pd_hapmap$QCcode    <- as.character(rep(NA, length(pd_hapmap$rs)))
 
-dummy_hapmap <- dummy_hapmap[, c(1, 12, 2, 3, 13, 14, 15, 16, 17,
-                                 18, 19, 4, 5, 6, 7, 8, 9, 10, 11)]
-
-# May not be necessary --
-dum_hap_colnames <- as.data.frame(t(colnames(dummy_hapmap)))
-dhcn <- c('rs', 'alleles', 'chrom', 'pos', 'strand', 'assembly', 'center',
-          'protLSID', 'assayLSID', 'panel', 'QCcode', '1275', '8060', '8522',
-          '441', '6573', '4280', '7678', '9170')
-names(dum_hap_colnames) <- dhcn
-dummy_hapmap_mod <- rbind(dum_hap_colnames, dummy_hapmap)
-
+pd_hapmap <- pd_hapmap[, c(1, 14, 2, 3, 15, 16, 17, 18, 19,
+                           20, 21, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13)]
 
 ### PHENOTYPE CONSTRUCTION ###
-pheno_col_names <- c('UserID', 'Pheno')
-pd_pheno_df <- tibble(pd_user_sample,
-                      rep(1, length(pd_user_sample)))
-control_pheno_df <- tibble(control_user_sample,
-                     rep(0, length(control_user_sample)))
-names(pd_pheno_df) <- pheno_col_names
+pheno_col_names         <- c('UserID', 'Pheno')
+pd_pheno_df             <- tibble(pd_user_sample,
+                                  rep(1, length(pd_user_sample)))
+control_pheno_df        <- tibble(control_user_sample,
+                                  rep(0, length(control_user_sample)))
+names(pd_pheno_df)      <- pheno_col_names
 names(control_pheno_df) <- pheno_col_names
 
 # Final pd phenotype df
 pheno_df <- rbind(pd_pheno_df, control_pheno_df)
   
-  
-write.table(dummy_hapmap, 'dummy_hapmap.hmp.txt', quote = FALSE, sep = '\t', row.names = FALSE)
-write.table(pheno_df, 'dummy_pheno.txt', quote = FALSE, sep = '\t', row.names = FALSE)
+setwd(paste0(top_level_path, ext2_path))
 
-### NOTE 18.06.2020 -- Needs to include section hapmap creation for LOAD and control as well
+write.table(pd_hapmap, 'pd_hapmap.txt', quote = FALSE, sep = '\t', row.names = FALSE)
+write.table(pheno_df, 'pd_pheno.txt', quote = FALSE, sep = '\t', row.names = FALSE)
+
+### NOTE 18.06.2020 -- Needs spark cluster connection to show competence
