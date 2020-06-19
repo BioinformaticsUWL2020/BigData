@@ -191,6 +191,10 @@ names(control_pheno_df) <- pheno_col_names
 
 # Final pd phenotype df
 pheno_df <- rbind(load_pheno_df, control_pheno_df)
+
+if (!(dir.exists('HapMap_and_Pheno_Files/'))){
+  dir.create('HapMap_and_Pheno_Files/')
+} 
 setwd(paste0(top_level_path, ext2_path))
 
 write.table(load_hapmap, 'load_hapmap.txt', quote = FALSE, sep = '\t', row.names = FALSE)

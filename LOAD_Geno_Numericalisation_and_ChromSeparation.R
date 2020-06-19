@@ -24,6 +24,8 @@ library(NAM)
 top_level_path <- 'C:/Users/zacha/Documents/BigData/' # Change to match your file structure
 ext_path       <- 'LOAD_Geno_by_Chrom/'
 
+setwd(top_level_path)
+
 # Genotype Numericalisation
 myY  <- read.table('load_pheno.txt', head = TRUE)
 myG  <- read.table('load_hapmap.txt', head = FALSE)
@@ -140,9 +142,6 @@ numeric_load_genotype_chromY <- numeric_load_genotype %>%
 numeric_load_genotype_chromMT <- numeric_load_genotype %>%
   filter(grepl('^25$', Chromosome))
 
-# Where the .txt files will be written
-setwd(paste0(top_level_path, ext_path))
-
 chrom_sep_genotypes <- list(numeric_load_genotype_chrom1, numeric_load_genotype_chrom2, 
                             numeric_load_genotype_chrom3, numeric_load_genotype_chrom4,
                             numeric_load_genotype_chrom5, numeric_load_genotype_chrom6,
@@ -159,6 +158,13 @@ chrom_sep_genotypes <- list(numeric_load_genotype_chrom1, numeric_load_genotype_
 
 list_names <- as.character(c(1:22, 'X', 'Y', 'MT'))
 names(chrom_sep_genotypes) <- list_names
+
+if(!(dir.exists('LOAD_Geno_by_Chrom'))) {
+  dir.create('LOAD_Geno_by_Chrom')
+}
+
+# Where the .txt files will be written
+setwd(paste0(top_level_path, ext_path))
 
 for(i in 1:length(chrom_sep_genotypes)) {
   write.table(

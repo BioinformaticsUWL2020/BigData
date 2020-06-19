@@ -160,6 +160,13 @@ chrom_sep_genotypes <- list(numeric_pd_genotype_chrom1, numeric_pd_genotype_chro
 list_names <- as.character(c(1:22, 'X', 'Y', 'MT'))
 names(chrom_sep_genotypes) <- list_names
 
+if(!(dir.exists('PD_Geno_by_Chrom'))) {
+  dir.create('PD_Geno_by_Chrom')
+}
+
+# Where the .txt files will be written
+setwd(paste0(top_level_path, ext_path))
+
 for(i in 1:length(chrom_sep_genotypes)) {
   write.table(
     chrom_sep_genotypes[[i]],
